@@ -1,0 +1,125 @@
+ActsAsTaggableRedux
+===================
+
+Allows for tags to be added to multiple classes, and adds functionality to make tags easier to work with.
+
+
+
+Prerequisites
+=============
+
+ActsAsTaggableRedux depends on database tables to store tagging information.  Create the migration for these tables with this command:
+  
+  rake acts_as_taggable:db:create
+  
+Then run the migration to create the tables with this command:
+  
+  rake db:migrate
+  
+OPTIONAL: To pretty up tag clouds and lists you can generate an example stylesheet with this command:
+
+  rake acts_as_taggable:stylesheet:create
+
+and then include this in your layouts that have tag clouds:
+
+  <%= stylesheet_link_tag 'acts_as_taggable_stylesheet' %>
+
+
+Example
+=======
+
+The following is an example of how you might integrate tags with an Item model.
+
+config/routes.rb
+  may.resource :items, :tags
+  
+  
+app/views/items/new.erb
+  <h1>New Item</h1>
+  
+  <% form_for(:item, @item) do |f| -%>
+    
+    <%= error_message_for :item %>
+    
+    <b>Tags:</b> <%= f.text_field :tag_list -%>
+    
+    <%= submit_tag "Save" -%>
+    
+  <% end -%>
+  
+app/views/items/show.erb
+  Item tagged with: 
+  <% item.tags.each do |tag| -%>
+    <%= link_to_tag(tag) %>
+  <% end -%>
+  
+app/views/items/edit.erb
+  <h1>New Item</h1>
+  
+  <% form_for(:item, @item, :html => { :method => :post }) do |f| -%>
+  
+    <%= error_messages_for :item %>
+    
+    <b>Tags:</b> <%= f.text_field :tag_list -%>
+    
+    <%= submit_tag "Save" -%>
+  
+  <% end -%>
+
+
+app/controllers/items_controller.rb
+  class ItemController < ApplicationController
+    def new
+      @item = Item.new
+    end
+    
+    def create
+      @item = Item.new(params[:item])
+      
+      respond_to do |format|
+        if @item.save
+          flash[:notice] = 'Item was successfully created.'
+          format.html { redirect_to item_url(@item) }
+          format.xml  { head :created, :location => item_url(@item) }
+        else
+          format.html { render :action => "new" }
+          format.xml  { render :xml => @item.errors.to_xml }
+        end
+      end
+    end
+
+    def show
+      @item = Item.find(params[:id], :include => :tags)
+    end
+    
+    def edit
+      @item = Item.find(params[:id])
+    end
+    
+    def update
+      @item = Item.find(params[:id])
+      
+      respond_to do |format|
+        if @item.update_attributes(params[:item])
+          flash[:notice] = 'Item was successfully updated.'
+          format.html { redirect_to item_url(@item) }
+          format.xml  { head :updated, :location => item_url(@item) }
+        end
+          format.html { render :action => "edit"}
+          format.xml  { render :xml => @item.errors.to_xml}
+      end
+    end
+  end
+
+
+
+Tag clouds
+==========
+
+Tag clouds are created by a helper function, and depend on the counter cache to get fast accurate counts.  To ensure this keeps working properly, don't add new tags to a taggable in any way other than using the tag.tag(taggable) style.  This will ensure that the caches don't lose track.  Also, see the prerequisites for installing the stylesheet so that the tag cloud actually looks like a tag cloud.  Otherwise, just pop into a view that you want the tag cloud to appear and type this:
+
+  <%= tag_cloud %>
+  
+  
+  
+Copyright (c) 2007 monki(Wesley Beary), released under the MIT license

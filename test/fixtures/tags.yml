@@ -1,0 +1,24 @@
+animal:
+  id: 1
+  name: animal
+  taggings_count: 2
+  
+plant:
+  id: 2
+  name: plant
+  taggings_count: 2
+  
+green:
+  id: 3
+  name: green
+  taggings_count: 2
+  
+not_green:
+  id: 4
+  name: not green
+  taggings_count: 2
+  
+favorite:
+  id: 5
+  name: favorite
+  taggings_count: 0

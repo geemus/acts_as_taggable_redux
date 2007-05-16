@@ -1,0 +1,15 @@
+bear:
+  id: 1
+  name: bear
+
+frog:
+  id: 2
+  name: frog
+  
+cactus:
+  id: 3
+  name: cactus
+  
+orange:
+  id: 4
+  name: orange

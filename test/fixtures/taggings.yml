@@ -1,0 +1,47 @@
+bear_animal:
+  id: 1
+  taggable_id: 1
+  taggable_type: Thing
+  tag_id: 1
+  
+bear_not_green:
+  id: 2
+  taggable_id: 1
+  taggable_type: Thing
+  tag_id: 4
+  
+frog_animal:
+  id: 3
+  taggable_id: 2
+  taggable_type: Thing
+  tag_id: 1
+
+frog_green:
+  id: 4
+  taggable_id: 2
+  taggable_type: Thing
+  tag_id: 3
+  
+cactus_plant:
+  id: 5
+  taggable_id: 3
+  taggable_type: Thing
+  tag_id: 2
+
+cactus_green:
+  id: 6
+  taggable_id: 3
+  taggable_type: Thing
+  tag_id: 3
+  
+orange_plant:
+  id: 7
+  taggable_id: 4
+  taggable_type: Thing
+  tag_id: 2
+
+orange_not_green:
+  id: 8
+  taggable_id: 4
+  taggable_type: Thing
+  tag_id: 4
