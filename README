@@ -1,7 +1,7 @@
 ActsAsTaggableRedux
 ===================
 
-Allows for tags to be added to multiple classes, and adds functionality to make tags easier to work with.
+Allows for tags to be added to multiple classes, and adds functionality to make tags easier to work with.  Note: The example and helper use RESTful routes, which require using EDGE rails.  Please install that first if you want to use this functionality.
 
 
 
