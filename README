@@ -51,7 +51,9 @@ app/views/items/new.erb
     
   <% end -%>
   
-if you want users to own taggings add this into the form
+if you want users to own taggings change the tags line to this
+  <b>Tags:</b> <%= f.text_field :tag_list, :value => @item.tag_list(user) -%>
+and add this line beneath it
   <%= f.hidden_field :user_id, :value => user.id -%>
   
 app/views/items/show.erb

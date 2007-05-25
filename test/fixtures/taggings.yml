@@ -45,3 +45,10 @@ orange_not_green:
   taggable_id: 4
   taggable_type: Thing
   tag_id: 4
+  
+monki_bear_favorite:
+  id: 9
+  taggable_id: 1
+  taggable_type: Thing
+  tag_id: 5
+  user_id: 1

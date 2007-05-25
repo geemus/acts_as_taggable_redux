@@ -64,8 +64,12 @@ module ActiveRecord
           @new_user = User.find(new_user_id)
         end
         
-        def tag_list
-          tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
+        def tag_list(user = nil)
+          unless user
+            tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
+          else
+            tags.delete_if { |tag| tag.user != user }.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
+          end
         end
         
         def update_tags
