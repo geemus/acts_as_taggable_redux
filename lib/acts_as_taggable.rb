@@ -22,6 +22,7 @@ module ActiveRecord
         # 
         # Options:
         #   :match - Match taggables matching :all or :any of the tags, defaults to :any
+        #   :user  - Limits results to those owned by a particular user
         def find_tagged_with(tags, options = {})
           options.assert_valid_keys([:match, :user])
           
@@ -29,13 +30,15 @@ module ActiveRecord
           return [] if tags.empty?
           
           group = "#{table_name}_taggings.taggable_id HAVING COUNT(#{table_name}_taggings.taggable_id) = #{tags.size}" if options[:match] == :all
+          conditions = sanitize_sql(["#{table_name}_tags.name IN (?)", tags])
+          conditions += sanitize_sql([" AND #{table_name}_taggings.user_id = ?", options[:user]]) if options[:user]
           
           find(:all, 
             { 
               :select =>  "DISTINCT #{table_name}.*",
               :joins  =>  "LEFT OUTER JOIN taggings #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
                           "LEFT OUTER JOIN tags #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
-              :conditions => sanitize_sql(["#{table_name}_tags.name IN (?)", tags]),
+              :conditions => conditions,
               :group  =>  group
             })
         end
@@ -46,20 +49,7 @@ module ActiveRecord
         #   :match - Match taggables matching :all or :any of the tags, defaults to :any
         def find_tagged_with_by_user(tags, user, options = {})
           options.assert_valid_keys([:match])
-          
-          tags = Tag.parse(tags)
-          return [] if tags.empty?
-          
-          group = "#{table_name}_taggings.taggable_id HAVING COUNT(#{table_name}_taggings.taggable_id) = #{tags.size}" if options[:match] == :all
-          
-          find(:all, 
-            { 
-              :select =>  "DISTINCT #{table_name}.*",
-              :joins  =>  "LEFT OUTER JOIN taggings #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
-                          "LEFT OUTER JOIN tags #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
-              :conditions => sanitize_sql(["#{table_name}_tags.name IN (?) AND #{table_name}_taggings.user_id = ?", tags, user]),
-              :group  =>  group
-            })
+          find_tagged_with(tags, {:match => options[:match], :user => user})
         end
       end
       
