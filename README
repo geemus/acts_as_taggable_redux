@@ -1,12 +1,13 @@
 ActsAsTaggableRedux
 ===================
 
-Allows for tags to be added to multiple classes, and adds functionality to make tags easier to work with.  Note: The example and helper use RESTful routes, which require using EDGE rails.  Please install that first if you want to use this functionality.
-
+Allows for user owned tags to be added to multiple classes, and makes tags easier to work with.
 
 
 Prerequisites
 =============
+
+Install Edge Rails before you get started so you get RESTful routing.
 
 ActsAsTaggableRedux depends on database tables to store tagging information.  Create the migration for these tables with this command:
   
@@ -15,6 +16,9 @@ ActsAsTaggableRedux depends on database tables to store tagging information.  Cr
 Then run the migration to create the tables with this command:
   
   rake db:migrate
+  
+Also you will need to add this to your user model:
+  acts_as_tagger
   
 OPTIONAL: To pretty up tag clouds and lists you can generate an example stylesheet with this command:
 
@@ -46,6 +50,9 @@ app/views/items/new.erb
     <%= submit_tag "Save" -%>
     
   <% end -%>
+  
+if you want users to own taggings add this into the form
+  <%= f.hidden_field :user_id, :value => user.id -%>
   
 app/views/items/show.erb
   Item tagged with: 

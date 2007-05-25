@@ -10,11 +10,18 @@ ActiveRecord::Schema.define :version => 0 do
     t.column :tag_id, :integer
     t.column :taggable_id, :integer
     t.column :taggable_type, :string
+    t.column :user_id, :integer
   end
   add_index :taggings, [:tag_id, :taggable_type] 
-  add_index :taggings, [:taggable_id, :taggable_type, :tag_id]
+  add_index :taggings, [:user_id, :tag_id, :taggable_type]
+  add_index :taggings, [:taggable_id, :taggable_type] 
+  add_index :taggings, [:user_id, :taggable_id, :taggable_type]
   
   create_table :things, :force => true do |t|
     t.column :name, :string
+  end
+  
+  create_table :users, :force => true do |t|
+    t.column :username, :string
   end
 end

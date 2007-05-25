@@ -25,6 +25,7 @@ class ActsAsTaggableTest < Test::Unit::TestCase
   end
   
   def test_update_tags
+    current_user = users(:monki)
     assert_equal things(:bear).tag_list, "animal \"not green\""
     things(:bear).tag_list = 'animal "not green" favorite'
     assert_equal things(:bear).tag_list, "animal \"not green\""

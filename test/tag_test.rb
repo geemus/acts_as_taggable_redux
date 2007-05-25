@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + "/test_helper"
 
 class TagTest < Test::Unit::TestCase
-  fixtures :taggings, :tags, :things
-
   def test_taggings
     assert_equal [taggings(:bear_animal), taggings(:frog_animal)], tags(:animal).taggings
     assert_not_equal [taggings(:cactus_plant), taggings(:orange_plant)], tags(:animal).taggings

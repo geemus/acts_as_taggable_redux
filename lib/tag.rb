@@ -28,9 +28,9 @@ class Tag < ActiveRecord::Base
     return tag_names
   end
   
-  # Tag a taggable with this tag
-  def tag(taggable)
-    taggings.create :taggable => taggable
+  # Tag a taggable with this tag, optionally add user to add owner to tagging
+  def tag(taggable, user = nil)
+    taggings.create :taggable => taggable, :user => user
     taggings.reset
     @tagged = nil
   end
