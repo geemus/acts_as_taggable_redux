@@ -75,7 +75,11 @@ module ActiveRecord
         def update_tags
           if @new_tag_list
             Tag.transaction do
-              taggings.destroy_all
+              unless @new_user
+                taggings.destroy_all
+              else
+                taggings.destroy_all(" user_id = #{user.id}")
+              end
             
               Tag.parse(@new_tag_list).each do |name|
                 Tag.find_or_create_by_name(name).tag(self, @new_user)
