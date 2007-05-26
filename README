@@ -20,6 +20,8 @@ Then run the migration to create the tables with this command:
 Also you will need to add this to your user model:
   acts_as_tagger
   
+OPTIONAL: The helper functions assume the pressence of a tags controller, that is what the tag clouds and tags will link to.
+  
 OPTIONAL: To pretty up tag clouds and lists you can generate an example stylesheet with this command:
 
   rake acts_as_taggable:stylesheet:create
