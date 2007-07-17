@@ -78,7 +78,9 @@ module ActiveRecord
               unless @new_user
                 taggings.destroy_all
               else
-                taggings.destroy_all(" user_id = #{@new_user.id}")
+                taggings.find(:all, :conditions => "user_id = #{@new_user.id}").each do |tagging|
+                  tagging.destroy
+                end
               end
             
               Tag.parse(@new_tag_list).each do |name|
