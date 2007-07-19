@@ -61,7 +61,7 @@ module ActiveRecord
         end
         
         def user_id=(new_user_id)
-          @new_user = User.find(new_user_id)
+          @new_user_id = User.find(new_user_id).id
         end
         
         def tag_list(user = nil)
@@ -75,16 +75,16 @@ module ActiveRecord
         def update_tags
           if @new_tag_list
             Tag.transaction do
-              unless @new_user
+              unless @new_user_id
                 taggings.destroy_all
               else
-                taggings.find(:all, :conditions => "user_id = #{@new_user.id}").each do |tagging|
+                taggings.find(:all, :conditions => "user_id = #{@new_user_id}").each do |tagging|
                   tagging.destroy
                 end
               end
             
               Tag.parse(@new_tag_list).each do |name|
-                Tag.find_or_create_by_name(name).tag(self, @new_user)
+                Tag.find_or_create_by_name(name).tag(self, @new_user_id)
               end
 
               tags.reset
