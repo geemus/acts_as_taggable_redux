@@ -68,7 +68,7 @@ module ActiveRecord
           unless user
             tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
           else
-            tags.delete_if { |tag| tag.user != user }.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
+            tags.delete_if { |tag| !user.tags.include(tag) }.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
           end
         end
         
