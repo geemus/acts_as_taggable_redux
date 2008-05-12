@@ -24,6 +24,12 @@ module ActiveRecord
         #   :match - Match taggables matching :all or :any of the tags, defaults to :any
         #   :user  - Limits results to those owned by a particular user
         def find_tagged_with(tags, options = {})
+          tagged_with_scope(tags, options) do
+            find(:all, :select =>  "DISTINCT #{table_name}.*")
+          end
+        end
+        
+        def tagged_with_scope(tags, options={})
           options.assert_valid_keys([:match, :user])
           
           tags = Tag.parse(tags)
@@ -33,14 +39,14 @@ module ActiveRecord
           conditions = sanitize_sql(["#{table_name}_tags.name IN (?)", tags])
           conditions += sanitize_sql([" AND #{table_name}_taggings.user_id = ?", options[:user]]) if options[:user]
           
-          find(:all, 
-            { 
-              :select =>  "DISTINCT #{table_name}.*",
-              :joins  =>  "LEFT OUTER JOIN taggings #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
-                          "LEFT OUTER JOIN tags #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
-              :conditions => conditions,
-              :group  =>  group
-            })
+          find_parameters = {
+            :joins  =>  "LEFT OUTER JOIN taggings #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
+                        "LEFT OUTER JOIN tags #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
+            :conditions => conditions,
+            :group  =>  group            
+          }
+          
+          with_scope(:find => find_parameters) { yield }          
         end
         
         # Pass a tag string, returns taggables that match the tag string for a particular user.
