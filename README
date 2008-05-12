@@ -133,4 +133,11 @@ Tag clouds are created by a helper function, and depend on the counter cache to 
   
   
   
-Copyright (c) 2007 monki(Wesley Beary), released under the MIT license
+Contributing
+============
+
+Welcoming all pull requests on github.com at http://github.com/monki/acts_as_taggable_redux/tree/master or git://github.com/monki/acts_as_taggable_redux.git
+
+
+
+Copyright (c) 2008 monki(Wesley Beary), released under the MIT license
