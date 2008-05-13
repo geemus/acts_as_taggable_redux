@@ -27,7 +27,22 @@ class Tag < ActiveRecord::Base
     
     return tag_names
   end
-  
+
+  # Grab a distinct list of tags only for a particular type of taggable. 
+  # For example, if you had a taggable Foo, you could get all tags used on Foo via:
+  #
+  #  Tag.with_type_scope('Foo') { Tag.find(:all) }
+  #
+  # If no parameter is given, the scope does not take effect.
+
+  def self.with_type_scope(taggable_type)
+    if taggable_type
+      with_scope(:find => {:select => 'distinct *', :joins => "left outer join taggings on taggings.tag_id = tags.id", :conditions => ["taggable_type = ?", taggable_type], :group => "name"}) { yield }
+    else
+      yield
+    end      
+  end
+    
   # Tag a taggable with this tag, optionally add user to add owner to tagging
   def tag(taggable, user_id = nil)
     taggings.create :taggable => taggable, :user_id => user_id
