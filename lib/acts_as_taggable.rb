@@ -8,7 +8,7 @@ module ActiveRecord
       module ClassMethods
         def acts_as_taggable(options = {})
           has_many :taggings, :as => :taggable, :dependent => :destroy, :include => :tag
-          has_many :tags, :through => :taggings
+          has_many :tags, :through => :taggings, :order => 'name asc'
           
           after_save :update_tags
           
@@ -72,7 +72,7 @@ module ActiveRecord
         
         def tag_list(user = nil)
           unless user
-            tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
+            resiult = tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
           else
             tags.delete_if { |tag| !user.tags.include?(tag) }.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
           end

@@ -29,6 +29,6 @@ class ActsAsTaggableTest < Test::Unit::TestCase
     things(:bear).tag_list = 'animal "not green" favorite'
     assert_equal things(:bear).tag_list, "animal \"not green\""
     things(:bear).update_tags
-    assert_equal things(:bear).tag_list, "animal \"not green\" favorite"
+    assert_equal things(:bear).tag_list, "animal favorite \"not green\""
   end
 end
