@@ -1,0 +1,104 @@
+# Logfile created on Thu May 15 14:17:58 -0500 2008 by logger.rb/1.5.2.9
+  [4;36;1mSQL (0.000346)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such table: tags: DROP TABLE tags[0m
+  [4;36;1mSQL (0.000336)[0m   [0;1mCREATE TABLE tags ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255) DEFAULT NULL, "taggings_count" integer DEFAULT 0 NOT NULL) [0m
+  [4;35;1mSQL (0.000171)[0m   [0mCREATE INDEX "index_tags_on_name" ON tags ("name")[0m
+  [4;36;1mSQL (0.000153)[0m   [0;1mCREATE INDEX "index_tags_on_taggings_count" ON tags ("taggings_count")[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such table: taggings: DROP TABLE taggings[0m
+  [4;36;1mSQL (0.000188)[0m   [0;1mCREATE TABLE taggings ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "tag_id" integer DEFAULT NULL, "taggable_id" integer DEFAULT NULL, "taggable_type" varchar(255) DEFAULT NULL, "user_id" integer DEFAULT NULL) [0m
+  [4;35;1mSQL (0.000153)[0m   [0mCREATE INDEX "index_taggings_on_tag_id_and_taggable_type" ON taggings ("tag_id", "taggable_type")[0m
+  [4;36;1mSQL (0.000166)[0m   [0;1mCREATE INDEX "index_taggings_on_user_id_and_tag_id_and_taggable_type" ON taggings ("user_id", "tag_id", "taggable_type")[0m
+  [4;35;1mSQL (0.000156)[0m   [0mCREATE INDEX "index_taggings_on_taggable_id_and_taggable_type" ON taggings ("taggable_id", "taggable_type")[0m
+  [4;36;1mSQL (0.000161)[0m   [0;1mCREATE INDEX "index_taggings_on_user_id_and_taggable_id_and_taggable_type" ON taggings ("user_id", "taggable_id", "taggable_type")[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such table: things: DROP TABLE things[0m
+  [4;36;1mSQL (0.000176)[0m   [0;1mCREATE TABLE things ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255) DEFAULT NULL) [0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such table: users: DROP TABLE users[0m
+  [4;36;1mSQL (0.000177)[0m   [0;1mCREATE TABLE users ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "username" varchar(255) DEFAULT NULL) [0m
+  [4;35;1mSQL (0.000184)[0m   [0mCREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000069)[0m   [0;1mINSERT INTO schema_info (version) VALUES(0)[0m
+  [4;35;1mSQL (0.000082)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mThing Load (0.000163)[0m   [0;1mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;35;1mThing Load (0.000162)[0m   [0mSELECT * FROM things WHERE (things."id" = 2) [0m
+  [4;36;1mThing Load (0.001725)[0m   [0;1mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('animal')) GROUP BY things_taggings.taggable_id HAVING COUNT(things_taggings.taggable_id) = 1[0m
+  [4;35;1mThing Load (0.001072)[0m   [0mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('animal','green')) GROUP BY things_taggings.taggable_id HAVING COUNT(things_taggings.taggable_id) = 2[0m
+  [4;36;1mThing Load (0.000946)[0m   [0;1mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('fake')) GROUP BY things_taggings.taggable_id HAVING COUNT(things_taggings.taggable_id) = 1[0m
+  [4;35;1mThing Load (0.000893)[0m   [0mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('animal','plant')) GROUP BY things_taggings.taggable_id HAVING COUNT(things_taggings.taggable_id) = 2[0m
+  [4;36;1mThing Load (0.000182)[0m   [0;1mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;35;1mThing Load (0.000160)[0m   [0mSELECT * FROM things WHERE (things."id" = 2) [0m
+  [4;36;1mThing Load (0.000919)[0m   [0;1mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('animal')) [0m
+  [4;35;1mThing Load (0.000181)[0m   [0mSELECT * FROM things WHERE (things."id" = 3) [0m
+  [4;36;1mThing Load (0.000909)[0m   [0;1mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('animal','green')) [0m
+  [4;35;1mThing Load (0.001076)[0m   [0mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('fake')) [0m
+  [4;36;1mThing Load (0.000792)[0m   [0;1mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('animal')) [0m
+  [4;35;1mThing Load (0.000842)[0m   [0mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('animal','green')) [0m
+  [4;36;1mThing Load (0.000694)[0m   [0;1mSELECT DISTINCT things.* FROM things LEFT OUTER JOIN taggings things_taggings ON things_taggings.taggable_id = things.id AND things_taggings.taggable_type = 'Thing' LEFT OUTER JOIN tags things_tags ON things_tags.id = things_taggings.tag_id WHERE (things_tags.name IN ('fake')) [0m
+  [4;35;1mThing Load (0.000173)[0m   [0mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;36;1mTag Load (0.010343)[0m   [0;1mSELECT tags.* FROM tags INNER JOIN taggings ON tags.id = taggings.tag_id WHERE ((taggings.taggable_type = 'Thing') AND (taggings.taggable_id = 1)) ORDER BY name asc[0m
+  [4;35;1mThing Load (0.000226)[0m   [0mSELECT * FROM things WHERE (things."id" = 2) [0m
+  [4;36;1mTag Load (0.000703)[0m   [0;1mSELECT tags.* FROM tags INNER JOIN taggings ON tags.id = taggings.tag_id WHERE ((taggings.taggable_type = 'Thing') AND (taggings.taggable_id = 2)) ORDER BY name asc[0m
+  [4;35;1mThing Load (0.000232)[0m   [0mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;36;1mTag Load (0.000751)[0m   [0;1mSELECT tags.* FROM tags INNER JOIN taggings ON tags.id = taggings.tag_id WHERE ((taggings.taggable_type = 'Thing') AND (taggings.taggable_id = 1)) ORDER BY name asc[0m
+  [4;35;1mTagging Load Including Associations (0.000550)[0m   [0mSELECT taggings."id" AS t0_r0, taggings."tag_id" AS t0_r1, taggings."taggable_id" AS t0_r2, taggings."taggable_type" AS t0_r3, taggings."user_id" AS t0_r4, tags."id" AS t1_r0, tags."name" AS t1_r1, tags."taggings_count" AS t1_r2 FROM taggings LEFT OUTER JOIN tags ON tags.id = taggings.tag_id WHERE (taggings.taggable_id = 1 AND taggings.taggable_type = 'Thing') [0m
+  [4;36;1mTag Update (0.000111)[0m   [0;1mUPDATE tags SET "taggings_count" = "taggings_count" - 1 WHERE ("id" = 1) [0m
+  [4;35;1mTag Update (0.000093)[0m   [0mUPDATE tags SET "taggings_count" = "taggings_count" - 1 WHERE ("id" = 1) [0m
+  [4;36;1mTagging Destroy (0.000096)[0m   [0;1m DELETE FROM taggings
+ WHERE "id" = 1
+[0m
+  [4;35;1mTag Update (0.000095)[0m   [0mUPDATE tags SET "taggings_count" = "taggings_count" - 1 WHERE ("id" = 4) [0m
+  [4;36;1mTag Update (0.000092)[0m   [0;1mUPDATE tags SET "taggings_count" = "taggings_count" - 1 WHERE ("id" = 4) [0m
+  [4;35;1mTagging Destroy (0.000088)[0m   [0m DELETE FROM taggings
+ WHERE "id" = 2
+[0m
+  [4;36;1mTag Load (0.000196)[0m   [0;1mSELECT * FROM tags WHERE (tags."name" = 'not green') LIMIT 1[0m
+  [4;35;1mTagging Create (0.000163)[0m   [0mINSERT INTO taggings ("tag_id", "taggable_type", "taggable_id", "user_id") VALUES(4, 'Thing', 1, NULL)[0m
+  [4;36;1mTag Load (0.000240)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 4) [0m
+  [4;35;1mTag Update (0.000105)[0m   [0mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 4) [0m
+  [4;36;1mTag Update (0.000097)[0m   [0;1mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 4) [0m
+  [4;35;1mTag Load (0.000217)[0m   [0mSELECT * FROM tags WHERE (tags."name" = 'animal') LIMIT 1[0m
+  [4;36;1mTagging Create (0.000175)[0m   [0;1mINSERT INTO taggings ("tag_id", "taggable_type", "taggable_id", "user_id") VALUES(1, 'Thing', 1, NULL)[0m
+  [4;35;1mTag Load (0.000225)[0m   [0mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;36;1mTag Update (0.000102)[0m   [0;1mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 1) [0m
+  [4;35;1mTag Update (0.000093)[0m   [0mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 1) [0m
+  [4;36;1mTag Load (0.000186)[0m   [0;1mSELECT * FROM tags WHERE (tags."name" = 'favorite') LIMIT 1[0m
+  [4;35;1mTagging Create (0.000114)[0m   [0mINSERT INTO taggings ("tag_id", "taggable_type", "taggable_id", "user_id") VALUES(5, 'Thing', 1, NULL)[0m
+  [4;36;1mTag Load (0.000177)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 5) [0m
+  [4;35;1mTag Update (0.000097)[0m   [0mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 5) [0m
+  [4;36;1mTag Update (0.000091)[0m   [0;1mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 5) [0m
+  [4;35;1mTag Load (0.000787)[0m   [0mSELECT tags.* FROM tags INNER JOIN taggings ON tags.id = taggings.tag_id WHERE ((taggings.taggable_type = 'Thing') AND (taggings.taggable_id = 1)) ORDER BY name asc[0m
+  [4;36;1mTag Load (0.000196)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;35;1mTag Load (0.000176)[0m   [0mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;36;1mTag Load (0.000174)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;35;1mTag Load (0.000208)[0m   [0mSELECT * FROM tags WHERE (tags."id" = 5) [0m
+  [4;36;1mTagging Load (0.000101)[0m   [0;1mSELECT * FROM taggings WHERE (taggings.tag_id = 5) [0m
+  [4;35;1mThing Load (0.000155)[0m   [0mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;36;1mTagging Create (0.000130)[0m   [0;1mINSERT INTO taggings ("tag_id", "taggable_type", "taggable_id", "user_id") VALUES(5, 'Thing', 1, NULL)[0m
+  [4;35;1mTag Load (0.000187)[0m   [0mSELECT * FROM tags WHERE (tags."id" = 5) [0m
+  [4;36;1mTag Update (0.000100)[0m   [0;1mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 5) [0m
+  [4;35;1mTag Update (0.000093)[0m   [0mUPDATE tags SET "taggings_count" = "taggings_count" + 1 WHERE ("id" = 5) [0m
+  [4;36;1mTagging Load (0.000212)[0m   [0;1mSELECT * FROM taggings WHERE (taggings.tag_id = 5) [0m
+  [4;35;1mThing Load (0.000158)[0m   [0mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;36;1mThing Load (0.000169)[0m   [0;1mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;35;1mThing Load (0.000189)[0m   [0mSELECT * FROM things WHERE (things."id" = 2) [0m
+  [4;36;1mTag Load (0.000175)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;35;1mTagging Load (0.000343)[0m   [0mSELECT * FROM taggings WHERE (taggings.tag_id = 1) [0m
+  [4;36;1mThing Load (0.000282)[0m   [0;1mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;35;1mThing Load (0.000176)[0m   [0mSELECT * FROM things WHERE (things."id" = 2) [0m
+  [4;36;1mTag Load (0.000228)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 2) [0m
+  [4;35;1mTagging Load (0.000357)[0m   [0mSELECT * FROM taggings WHERE (taggings.tag_id = 2) [0m
+  [4;36;1mThing Load (0.000180)[0m   [0;1mSELECT * FROM things WHERE (things."id" = 3) [0m
+  [4;35;1mThing Load (0.000172)[0m   [0mSELECT * FROM things WHERE (things."id" = 4) [0m
+  [4;36;1mTagging Load (0.000268)[0m   [0;1mSELECT * FROM taggings WHERE (taggings."id" = 1) [0m
+  [4;35;1mTagging Load (0.000233)[0m   [0mSELECT * FROM taggings WHERE (taggings."id" = 3) [0m
+  [4;36;1mTag Load (0.000204)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;35;1mTagging Load (0.000623)[0m   [0mSELECT * FROM taggings WHERE (taggings.tag_id = 1) [0m
+  [4;36;1mTagging Load (0.000215)[0m   [0;1mSELECT * FROM taggings WHERE (taggings."id" = 5) [0m
+  [4;35;1mTagging Load (0.000207)[0m   [0mSELECT * FROM taggings WHERE (taggings."id" = 7) [0m
+  [4;36;1mTag Load (0.000195)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;35;1mTag Load (0.000344)[0m   [0mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;36;1mTagging Load (0.000212)[0m   [0;1mSELECT * FROM taggings WHERE (taggings."id" = 1) [0m
+  [4;35;1mTag Load (0.000175)[0m   [0mSELECT * FROM tags WHERE (tags."id" = 1) [0m
+  [4;36;1mTag Load (0.000180)[0m   [0;1mSELECT * FROM tags WHERE (tags."id" = 2) [0m
+  [4;35;1mThing Load (0.000163)[0m   [0mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;36;1mTagging Load (0.000216)[0m   [0;1mSELECT * FROM taggings WHERE (taggings."id" = 1) [0m
+  [4;35;1mThing Load (0.000168)[0m   [0mSELECT * FROM things WHERE (things."id" = 1) [0m
+  [4;36;1mThing Load (0.000159)[0m   [0;1mSELECT * FROM things WHERE (things."id" = 2) [0m

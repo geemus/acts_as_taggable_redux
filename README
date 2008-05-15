@@ -131,14 +131,7 @@ Tag clouds are created by a helper function, and depend on the counter cache to 
 
   <%= tag_cloud %>
   
-
-Running tests
-============= 
-
-The simplest way is to create a blank Rails project with this plugin, and run tests using the in-memory sqlite database:
-
-  rake DB=sqlite3
-
+  
   
 Contributing
 ============

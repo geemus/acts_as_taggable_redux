@@ -67,7 +67,8 @@ module ActiveRecord
         end
         
         def user_id=(new_user_id)
-          @new_user_id = User.find(new_user_id).id
+          @new_user_id = new_user_id
+          super(new_user_id)
         end
         
         def tag_list(user = nil)
