@@ -8,8 +8,10 @@ module ActsAsTaggableHelper
   #
   # Inspired by http://www.juixe.com/techknow/index.php/2006/07/15/acts-as-taggable-tag-cloud/
   def tag_cloud(options = {})
-    # TODO: add options to specify different limits and sorts
-    tags = Tag.find(:all, :limit => 100, :order => 'taggings_count DESC').sort_by(&:name)
+    options.assert_valid_keys(:limit, :order, :conditions)
+    options.reverse_merge! :limit => 100, :order => 'taggings_count DESC'
+
+    tags = Tag.find(:all, options).sort_by(&:name)
     
     # TODO: add option to specify which classes you want and overide this if you want?
     classes = %w(popular v-popular vv-popular vvv-popular vvvv-popular)
