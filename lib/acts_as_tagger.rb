@@ -8,7 +8,7 @@ module ActiveRecord
       module ClassMethods
         def acts_as_tagger(options = {})
           has_many :taggings
-          has_many :tags, :through => :taggings, :select => "DISTINCT tags.*"
+          has_many :tags, :through => :taggings, :select => "DISTINCT #{table_name_prefix}tags.*"
           
           extend ActiveRecord::Acts::Tagger::SingletonMethods
           include ActiveRecord::Acts::Tagger::InstanceMethods
