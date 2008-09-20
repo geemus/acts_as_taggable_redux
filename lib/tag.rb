@@ -37,7 +37,7 @@ class Tag < ActiveRecord::Base
 
   def self.with_type_scope(taggable_type)
     if taggable_type
-      with_scope(:find => {:select => 'distinct *', :joins => "left outer join taggings on taggings.tag_id = tags.id", :conditions => ["taggable_type = ?", taggable_type], :group => "name"}) { yield }
+      with_scope(:find => {:select => 'distinct *', :joins => "left outer join #{Taggings.table_name} on #{Taggings.table_name}.tag_id = #{Tags.table_name}.id", :conditions => ["taggable_type = ?", taggable_type], :group => "name"}) { yield }
     else
       yield
     end      

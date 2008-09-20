@@ -40,8 +40,8 @@ module ActiveRecord
           conditions += sanitize_sql([" AND #{table_name}_taggings.user_id = ?", options[:user]]) if options[:user]
           
           find_parameters = {
-            :joins  =>  "LEFT OUTER JOIN #{table_name_prefix}taggings #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
-                        "LEFT OUTER JOIN #{table_name_prefix}tags #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
+            :joins  =>  "LEFT OUTER JOIN #{Taggings.table_name} #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
+                        "LEFT OUTER JOIN #{Tags.table_name} #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
             :conditions => conditions,
             :group  =>  group            
           }
