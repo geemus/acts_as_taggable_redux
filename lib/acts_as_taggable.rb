@@ -30,7 +30,7 @@ module ActiveRecord
         end
         
         def tagged_with_scope(tags, options={})
-          options.assert_valid_keys([:match, :user])
+          options.assert_valid_keys([:match, :order, :user])
           
           tags = Tag.parse(tags)
           return [] if tags.empty?
@@ -43,7 +43,8 @@ module ActiveRecord
             :joins  =>  "LEFT OUTER JOIN #{Tagging.table_name} #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
                         "LEFT OUTER JOIN #{Tag.table_name} #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
             :conditions => conditions,
-            :group  =>  group            
+            :group  =>  group,
+            :order => options[:order]
           }
           
           with_scope(:find => find_parameters) { yield }          
@@ -54,8 +55,8 @@ module ActiveRecord
         # Options:
         #   :match - Match taggables matching :all or :any of the tags, defaults to :any
         def find_tagged_with_by_user(tags, user, options = {})
-          options.assert_valid_keys([:match])
-          find_tagged_with(tags, {:match => options[:match], :user => user})
+          options.assert_valid_keys([:match, :order])
+          find_tagged_with(tags, {:match => options[:match], :order => options[:order], :user => user})
         end
 
         # Returns an array of related tags.
@@ -103,7 +104,8 @@ AND #{Tagging.table_name}.tag_id = #{Tag.table_name}.id",
           unless user
             resiult = tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
           else
-            tags.delete_if { |tag| !user.tags.include?(tag) }.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
+            #TODO: make it work if I pass in an int instead of a user object
+            tags.find(:all, :conditions => ['"taggings"."user_id" = ?', user.id]).collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.uniq.join(" ")
           end
         end
         
