@@ -34,10 +34,14 @@ class Tag < ActiveRecord::Base
   #  Tag.with_type_scope('Foo') { Tag.find(:all) }
   #
   # If no parameter is given, the scope does not take effect.
+  #
+  # pass in a user id to have it scope by user_id as well
 
-  def self.with_type_scope(taggable_type)
+  def self.with_type_scope(taggable_type, user = nil)
     if taggable_type
-      with_scope(:find => {:select => 'distinct *', :joins => "left outer join #{Tagging.table_name} on #{Tagging.table_name}.tag_id = #{Tag.table_name}.id", :conditions => ["taggable_type = ?", taggable_type], :group => "name"}) { yield }
+      conditions = sanitize_sql(["taggable_type = ?", taggable_type])
+      conditions += sanitize_sql([" AND #{Tagging.table_name}.user_id = ?", user.to_i]) if user
+      with_scope(:find => {:select => 'distinct *', :joins => "left outer join #{Tagging.table_name} on #{Tagging.table_name}.tag_id = #{Tag.table_name}.id", :conditions => conditions, :group => "name"}) { yield }
     else
       yield
     end      
