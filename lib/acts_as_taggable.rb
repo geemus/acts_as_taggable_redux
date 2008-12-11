@@ -35,7 +35,7 @@ module ActiveRecord
           tags = Tag.parse(tags)
           return [] if tags.empty?
           
-          group = "#{table_name}_taggings.taggable_id HAVING COUNT(#{table_name}_taggings.taggable_id) = #{tags.size}" if options[:match] == :all
+          group = "#{table_name}_taggings.taggable_id HAVING COUNT(#{table_name}_taggings.taggable_id) >= #{tags.size}" if options[:match] == :all
           conditions = sanitize_sql(["#{table_name}_tags.name IN (?)", tags])
           conditions += sanitize_sql([" AND #{table_name}_taggings.user_id = ?", options[:user]]) if options[:user]
           
