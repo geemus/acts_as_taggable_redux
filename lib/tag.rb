@@ -41,7 +41,7 @@ class Tag < ActiveRecord::Base
     if taggable_type
       conditions = sanitize_sql(["taggable_type = ?", taggable_type])
       conditions += sanitize_sql([" AND #{Tagging.table_name}.user_id = ?", user.id]) if user
-      with_scope(:find => {:select => 'distinct *', :joins => "left outer join #{Tagging.table_name} on #{Tagging.table_name}.tag_id = #{Tag.table_name}.id", :conditions => conditions, :group => "name"}) { yield }
+      with_scope(:find => {:select => "distinct #{Tag.table_name}.*", :joins => "left outer join #{Tagging.table_name} on #{Tagging.table_name}.tag_id = #{Tag.table_name}.id", :conditions => conditions, :group => "name"}) { yield }
     else
       yield
     end
