@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     'MIT-LICENSE',
     'Rakefile',
     'README',
-    'tasks/acts_as_taggable_tasks.rake'
+    'tasks/acts_as_taggable_tasks.rake',
     'test/tagging_test.rb',
     'test/debug.log',
     'test/test_helper.rb',
