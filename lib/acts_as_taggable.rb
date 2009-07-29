@@ -102,10 +102,10 @@ AND #{Tagging.table_name}.tag_id = #{Tag.table_name}.id",
 
         def tag_list(user = nil)
           unless user
-            resiult = tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
+            result = tags.collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.join(" ")
           else
             #TODO: make it work if I pass in an int instead of a user object
-            tags.find(:all, :conditions => ['"taggings"."user_id" = ?', user.id]).collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.uniq.join(" ")
+            tags.find(:all, :conditions => ["#{Tagging.table_name}.user_id = ?", user.id]).collect { |tag| tag.name.include?(" ") ? %("#{tag.name}") : tag.name }.uniq.join(" ")
           end
         end
 
