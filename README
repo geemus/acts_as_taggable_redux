@@ -37,7 +37,7 @@ Example
 The following is an example of how you might integrate tags with an Item model.
 
 config/routes.rb
-  may.resource :items, :tags
+  map.resource :items, :tags
   
   
 app/views/items/new.erb
