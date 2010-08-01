@@ -1,4 +1,5 @@
 require 'acts_as_taggable'
+require 'acts_as_taggable_helper'
 require 'acts_as_tagger'
 
 ActiveRecord::Base.send(:include, ActiveRecord::Acts::Taggable)
