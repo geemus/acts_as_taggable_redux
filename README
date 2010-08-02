@@ -10,16 +10,21 @@ Prerequisites
 Install Edge Rails before you get started so you get RESTful routing.
 
 ActsAsTaggableRedux depends on database tables to store tagging information.  Create the migration for these tables with this command:
-  
+
   rake acts_as_taggable:db:create
-  
+
 Then run the migration to create the tables with this command:
-  
+
   rake db:migrate
-  
+
 Also you will need to add this to your user model:
+
   acts_as_tagger
-  
+
+Any models that will have tags applied to them should then have this added:
+
+  acts_as_taggable
+
 OPTIONAL: The helper functions assume the pressence of a tags controller, that is what the tag clouds and tags will link to.
   
 OPTIONAL: To pretty up tag clouds and lists you can generate an example stylesheet with this command:
