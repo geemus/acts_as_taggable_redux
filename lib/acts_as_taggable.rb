@@ -14,10 +14,18 @@ module ActiveRecord
 
           extend ActiveRecord::Acts::Taggable::SingletonMethods
           include ActiveRecord::Acts::Taggable::InstanceMethods
+          
+          # give us a nicer accessor for our new type
+          Tag.has_many k.to_sym, :through => :taggings, :source => :taggable, :source_type => self.class.name
         end
       end
 
       module SingletonMethods
+        # access just one tag's list of current model's types.  Use arel to limit/etc.
+        def tagged_by(tag)
+          Tag.send(self.class.name.downcase.to_sym)
+        end
+        
         # Pass a tag string, returns taggables that match the tag string.
         # 
         # Options:
