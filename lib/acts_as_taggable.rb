@@ -24,14 +24,6 @@ module ActiveRecord
         #   :match - Match taggables matching :all or :any of the tags, defaults to :any
         #   :user  - Limits results to those owned by a particular user
         def find_tagged_with(tags, options = {})
-          tagged_with_scope(tags, options) do
-            find(:all, :select =>  "#{table_name}.*")
-          end
-        end
-
-        # finds items of this class matching these tags
-        # results in: SELECT items.* FROM `items` LEFT OUTER JOIN taggings ON taggings.taggable_id = items.id AND taggings.taggable_type = 'Contest' WHERE (taggings.tag_id IN (4))
-        def tagged_with_scope(tags, options={})
           options.assert_valid_keys([:match, :order, :user])
           tags = Tag.parse(tags).collect {|t| Tag.select('id').where(:name => t).first}
 
@@ -39,16 +31,10 @@ module ActiveRecord
           conditions = sanitize_sql(["taggings.tag_id IN (?)", tags])               
           conditions += sanitize_sql([" AND #{table_name}_taggings.user_id = ?", options[:user]]) if options[:user]
 
-          find_parameters = {
-            :joins  =>  "LEFT OUTER JOIN taggings ON taggings.taggable_id = #{table_name}.#{primary_key} AND taggings.taggable_type = '#{name}' ",
-            :conditions => conditions,
-            :group  =>  group,
-            :order => options[:order]
-          }
-          
-          with_scope(:find => find_parameters) { yield }
+          joins("LEFT OUTER JOIN taggings ON taggings.taggable_id = #{table_name}.#{primary_key} AND taggings.taggable_type = '#{name}'").where(conditions).group(group).order(options[:order])
         end
-
+        
+        # 
         # Pass a tag string, returns taggables that match the tag string for a particular user.
         # 
         # Options:
