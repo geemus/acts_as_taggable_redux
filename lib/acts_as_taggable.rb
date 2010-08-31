@@ -14,18 +14,10 @@ module ActiveRecord
 
           extend ActiveRecord::Acts::Taggable::SingletonMethods
           include ActiveRecord::Acts::Taggable::InstanceMethods
-          
-          # give us a nicer accessor for our new type
-          Tag.has_many k.to_sym, :through => :taggings, :source => :taggable, :source_type => self.class.name
         end
       end
 
-      module SingletonMethods
-        # access just one tag's list of current model's types.  Use arel to limit/etc.
-        def tagged_by(tag)
-          Tag.send(self.class.name.downcase.to_sym)
-        end
-        
+      module SingletonMethods      
         # Pass a tag string, returns taggables that match the tag string.
         # 
         # Options:
@@ -33,28 +25,27 @@ module ActiveRecord
         #   :user  - Limits results to those owned by a particular user
         def find_tagged_with(tags, options = {})
           tagged_with_scope(tags, options) do
-            find(:all, :select =>  "DISTINCT #{table_name}.*")
+            find(:all, :select =>  "#{table_name}.*")
           end
         end
 
+        # finds items of this class matching these tags
+        # results in: SELECT items.* FROM `items` LEFT OUTER JOIN taggings ON taggings.taggable_id = items.id AND taggings.taggable_type = 'Contest' WHERE (taggings.tag_id IN (4))
         def tagged_with_scope(tags, options={})
           options.assert_valid_keys([:match, :order, :user])
+          tags = Tag.parse(tags).collect {|t| Tag.select('id').where(:name => t).first}
 
-          tags = Tag.parse(tags)
-          return [] if tags.empty?
-
-          group = "#{table_name}_taggings.taggable_id HAVING COUNT(#{table_name}_taggings.taggable_id) >= #{tags.size}" if options[:match] == :all
-          conditions = sanitize_sql(["#{table_name}_tags.name IN (?)", tags])
+          group = "#{table_name}_taggings.taggable_id HAVING COUNT(#{table_name}_taggings.taggable_id) >= #{tags.size}" if options[:match] == :all 
+          conditions = sanitize_sql(["taggings.tag_id IN (?)", tags])               
           conditions += sanitize_sql([" AND #{table_name}_taggings.user_id = ?", options[:user]]) if options[:user]
 
           find_parameters = {
-            :joins  =>  "LEFT OUTER JOIN #{Tagging.table_name} #{table_name}_taggings ON #{table_name}_taggings.taggable_id = #{table_name}.#{primary_key} AND #{table_name}_taggings.taggable_type = '#{name}' " +
-                        "LEFT OUTER JOIN #{Tag.table_name} #{table_name}_tags ON #{table_name}_tags.id = #{table_name}_taggings.tag_id",
+            :joins  =>  "LEFT OUTER JOIN taggings ON taggings.taggable_id = #{table_name}.#{primary_key} AND taggings.taggable_type = '#{name}' ",
             :conditions => conditions,
             :group  =>  group,
             :order => options[:order]
           }
-
+          
           with_scope(:find => find_parameters) { yield }
         end
 
