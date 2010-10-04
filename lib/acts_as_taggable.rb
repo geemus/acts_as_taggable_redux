@@ -74,9 +74,12 @@ AND #{Tagging.table_name}.tag_id = #{Tag.table_name}.id",
       end
 
       module InstanceMethods
+        # Warning: Not updated until save is called!
+        # hmm, want to update cache before the item is saved so we don't have to do another query
         def tag_list=(new_tag_list)
           unless tag_list == new_tag_list
-            @new_tag_list = new_tag_list
+            @new_tag_list = Tag.parse(new_tag_list)
+            self.tagnames = @new_tag_list.join(', ') if has_attribute?("tagnames")
           end
         end
 
@@ -97,6 +100,7 @@ AND #{Tagging.table_name}.tag_id = #{Tag.table_name}.id",
         def update_tags
           if @new_tag_list
             Tag.transaction do
+              # this needs commenting.  why only remove tags for the user?
               unless @new_user_id
                 taggings.destroy_all
               else
@@ -105,7 +109,8 @@ AND #{Tagging.table_name}.tag_id = #{Tag.table_name}.id",
                 end
               end
 
-              Tag.parse(@new_tag_list).each do |name|
+              #moved parse into tag_list = so we can assign to tagnames if present for caching
+              @new_tag_list.each do |name|
                 Tag.find_or_create_by_name(name).tag(self, @new_user_id)
               end
 
