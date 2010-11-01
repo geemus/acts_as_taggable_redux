@@ -3,6 +3,7 @@ ActsAsTaggableRedux
 
 Allows for user owned tags to be added to multiple classes, and makes tags easier to work with.
 
+NOTE: this gem has not been updated for rails 3 and I'm not really maintaining it any more. If you would like to update and/or maintain please contact geemus, thanks!
 
 Prerequisites
 =============
@@ -145,4 +146,4 @@ Welcoming all pull requests on github.com at http://github.com/monki/acts_as_tag
 
 
 
-Copyright (c) 2008 monki(Wesley Beary), released under the MIT license
+Copyright (c) 2010 geemus(Wesley Beary), released under the MIT license
